@@ -119,6 +119,20 @@ namespace Anamnesis.Files
 			return result.Directory;
 		}
 
+		public static void DirectSavePersistent(ActorMemory? actor, SaveModes mode = SaveModes.All)
+		{
+			if (actor == null)
+				return;
+
+			CharacterFile file = new CharacterFile();
+			file.WriteToFile(actor, mode);
+
+			string fiPath = FileService.ParseToFilePath(SettingsService.Current.DefaultPersistenceDirectory) + actor.Name + ".chara";
+
+			using FileStream stream = new FileStream(fiPath, FileMode.Create);
+			file.Serialize(stream);
+		}
+
 		public void WriteToFile(ActorMemory actor, SaveModes mode)
 		{
 			this.Nickname = actor.Nickname;

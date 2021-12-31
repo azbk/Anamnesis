@@ -4,7 +4,9 @@
 namespace Anamnesis.Memory
 {
 	using System;
+	using System.IO;
 	using System.Threading.Tasks;
+	using Anamnesis.Files;
 	using Anamnesis.Services;
 
 	public class ActorMemory : ActorBasicMemory
@@ -74,6 +76,7 @@ namespace Anamnesis.Memory
 		/// </summary>
 		public async Task RefreshAsync()
 		{
+			// Persistence: this is where characters are actually refreshed.
 			if (this.IsRefreshing || GposeService.Instance.IsGpose)
 				return;
 

@@ -26,6 +26,7 @@ namespace Anamnesis.Services
 		public string DefaultPoseDirectory { get; set; } = "%MyDocuments%/Anamnesis/Poses/";
 		public string DefaultCharacterDirectory { get; set; } = "%MyDocuments%/Anamnesis/Characters/";
 		public string DefaultSceneDirectory { get; set; } = "%MyDocuments%/Anamnesis/Scenes/";
+		public string DefaultPersistenceDirectory { get; set; } = "%MyDocuments%/Anamnesis/Characters/Persistence/";
 		public bool ShowAdvancedOptions { get; set; } = true;
 		public bool FlipPoseGuiSides { get; set; } = false;
 		public bool UseHyperlegibleFont { get; set; } = false;

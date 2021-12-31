@@ -72,6 +72,7 @@ namespace Anamnesis
 					}
 					else
 					{
+						// This is where we'll flag zone changes for persistence
 						if (newTerritoryId != this.CurrentTerritoryId)
 						{
 							this.CurrentTerritoryId = (uint)newTerritoryId;

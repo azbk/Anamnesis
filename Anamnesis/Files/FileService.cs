@@ -66,6 +66,11 @@ namespace Anamnesis.Files
 			"Shortcuts/ffxiv.png",
 			"Shortcut_FfxivAppearance");
 
+		public static Shortcut DefaultPersistenceDirectory => new Shortcut(
+			new DirectoryInfo(ParseToFilePath(SettingsService.Current.DefaultPersistenceDirectory)),
+			"Shortcuts/Anamnesis.png",
+			"Shortcut_AnamnesisPersistence");
+
 		/// <summary>
 		/// Replaces special folders (%ApplicationData%) with the actual path.
 		/// </summary>

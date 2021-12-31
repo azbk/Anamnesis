@@ -14,6 +14,7 @@ namespace Anamnesis.Character.Pages
 	using Anamnesis.GameData;
 	using Anamnesis.GameData.Sheets;
 	using Anamnesis.Memory;
+	using Anamnesis.Serialization;
 	using Anamnesis.Services;
 	using Anamnesis.Styles.Drawers;
 	using PropertyChanged;
@@ -49,6 +50,53 @@ namespace Anamnesis.Character.Pages
 				return;
 
 			this.OnActorChanged(this.DataContext as ActorMemory);
+
+			if (this.Actor == null)
+				return;
+
+			this.Actor.Equipment?.Arms?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Chest?.Clear(true);
+			this.Actor.Equipment?.Ear?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Feet?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Head?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Legs?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.LFinger?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Neck?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.RFinger?.Clear(this.Actor.IsPlayer);
+			this.Actor.Equipment?.Wrist?.Clear(this.Actor.IsPlayer);
+
+			this.Actor?.ModelObject?.Weapons?.Hide();
+			this.Actor?.ModelObject?.Weapons?.SubModel?.Hide();
+
+			try
+			{
+				// check if file exists, if so apply it
+				FileBase? file = Activator.CreateInstance(typeof(CharacterFile)) as FileBase;
+
+				if (this.Actor == null)
+				{
+					throw new Exception("Actor was null.");
+				}
+
+				string fiPath = FileService.ParseToFilePath(SettingsService.Current.DefaultPersistenceDirectory) + this.Actor.Name + ".chara";
+				using FileStream stream = new FileStream(fiPath, FileMode.Open);
+
+				using TextReader reader = new StreamReader(stream);
+				string json = reader.ReadToEnd();
+				file = (FileBase)SerializerService.Deserialize(json, typeof(CharacterFile));
+
+				if (file is CharacterFile apFile)
+				{
+					if (this.Actor != null)
+					{
+						Task.Run(() => apFile.Apply(this.Actor, CharacterFile.SaveModes.All));
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Verbose(ex, $"Failed to deserialize persistent file.");
+			}
 		}
 
 		private void OnClearClicked(object sender, RoutedEventArgs e)
